@@ -12,6 +12,9 @@ gem "puma"
 gem "rack"
 gem "rails-auth"
 gem "sinatra"
+gem "winrm",
+    git: 'https://github.com/Iristyle/WinRM',
+    ref: 'omi-server-compatibility'
 
 # Required to pick up plan specs in the rake spec task
 gem "puppetlabs_spec_helper",
