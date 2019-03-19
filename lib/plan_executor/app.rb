@@ -9,6 +9,8 @@ require 'bolt/puppetdb'
 require 'bolt/version'
 require 'plan_executor/applicator'
 require 'plan_executor/executor'
+require 'concurrent/executor/single_thread_executor'
+require 'concurrent/future'
 require 'json'
 require 'json-schema'
 
@@ -27,9 +29,6 @@ module PlanExecutor
     end
 
     def initialize(config)
-      # lazy-load expensive gem code
-      require 'concurrent'
-
       @http_client = create_http(config)
 
       # Use an empty inventory until we figure out where this data comes from.
