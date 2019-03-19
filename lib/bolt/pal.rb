@@ -3,15 +3,13 @@
 require 'bolt/applicator'
 require 'bolt/executor'
 require 'bolt/error'
+require 'bolt/pal_paths'
 require 'bolt/plan_result'
 require 'bolt/util'
 require 'etc'
 
 module Bolt
   class PAL
-    BOLTLIB_PATH = File.expand_path('../../bolt-modules', __dir__)
-    MODULES_PATH = File.expand_path('../../modules', __dir__)
-
     # PALError is used to convert errors from executing puppet code into
     # Bolt::Errors
     class PALError < Bolt::Error

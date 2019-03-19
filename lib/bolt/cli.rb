@@ -13,12 +13,10 @@ require 'bolt/analytics'
 require 'bolt/bolt_option_parser'
 require 'bolt/config'
 require 'bolt/error'
-require 'bolt/executor'
 require 'bolt/inventory'
 require 'bolt/logger'
 require 'bolt/outputter'
 require 'bolt/puppetdb'
-require 'bolt/pal'
 require 'bolt/target'
 require 'bolt/version'
 
@@ -270,6 +268,9 @@ module Bolt
         options[:task_options] = pal.parse_params(options[:subcommand], options[:object], options[:task_options])
       end
 
+      # lazy-load expensive gem code
+      require 'bolt/executor'
+
       case options[:subcommand]
       when 'plan'
         code = run_plan(options[:object], options[:task_options], options[:nodes], options)
@@ -435,6 +436,7 @@ module Bolt
     end
 
     def pal
+      require 'bolt/pal'
       @pal ||= Bolt::PAL.new(config.modulepath, config.hiera_config, config.compile_concurrency)
     end
 
@@ -470,6 +472,7 @@ module Bolt
 
     def bundled_content
       if %w[plan task].include?(options[:subcommand])
+        require 'bolt/pal'
         default_content = Bolt::PAL.new([], nil)
         plans = default_content.list_plans.each_with_object([]) do |iter, col|
           col << iter&.first

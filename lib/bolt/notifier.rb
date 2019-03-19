@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
+require 'concurrent/executor/single_thread_executor'
+
 module Bolt
   class Notifier
-    def initialize(executor = nil)
-      # lazy-load expensive gem code
-      require 'concurrent'
-
-      @executor = executor || Concurrent::SingleThreadExecutor.new
+    def initialize(executor = Concurrent::SingleThreadExecutor.new)
+      @executor = executor
     end
 
     def notify(callback, event)

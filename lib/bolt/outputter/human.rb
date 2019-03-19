@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'bolt/pal'
+require 'bolt/pal_paths'
 
 module Bolt
   class Outputter

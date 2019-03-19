@@ -52,7 +52,11 @@ describe "when loading bolt for CLI invocation" do
     end
 
     [
-      'openssl/x509.rb'
+      'openssl/x509.rb',
+      'lib/bolt/applicator.rb',
+      'lib/bolt/executor.rb',
+      'lib/bolt/notifier.rb',
+      'lib/bolt/pal.rb'
     ].each do |code_path|
       it "does not load #{code_path}" do
         specific_code = a_string_matching(Regexp.escape(code_path))

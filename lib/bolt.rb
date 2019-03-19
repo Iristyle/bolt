@@ -14,5 +14,4 @@ module Logging
 end
 
 module Bolt
-  require 'bolt/executor'
 end

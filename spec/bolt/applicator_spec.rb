@@ -7,6 +7,8 @@ require 'bolt/inventory'
 require 'bolt/pal'
 require 'bolt/puppetdb'
 require 'bolt/target'
+require 'concurrent/array'
+require 'concurrent/atomic/atomic_fixnum'
 
 describe Bolt::Applicator do
   let(:uri) { 'foobar' }
