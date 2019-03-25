@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'bolt/util'
 
 module Bolt
@@ -20,6 +19,7 @@ module Bolt
       end
 
       def self.load_config(filename, options)
+        require 'json'
         config = {}
         global_path = Bolt::Util.windows? ? DEFAULT_CONFIG[:win_global] : DEFAULT_CONFIG[:global]
         if filename

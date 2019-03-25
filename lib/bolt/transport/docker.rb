@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'shellwords'
 require 'bolt/transport/base'
 
@@ -104,6 +103,7 @@ module Bolt
             remote_task_path = conn.write_remote_executable(task_dir, executable)
 
             if STDIN_METHODS.include?(input_method)
+              require 'json'
               execute_options[:stdin] = StringIO.new(JSON.dump(arguments))
             end
 

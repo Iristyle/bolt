@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'bolt/error'
 require 'bolt/util'
 
@@ -34,6 +33,7 @@ module Bolt
     end
 
     def to_json(*args)
+      require 'json'
       @value.to_json(*args)
     end
 

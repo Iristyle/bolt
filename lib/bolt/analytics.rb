@@ -2,7 +2,6 @@
 
 require 'bolt/util'
 require 'bolt/version'
-require 'json'
 require 'logging'
 require 'securerandom'
 
@@ -111,6 +110,7 @@ module Bolt
       end
 
       def submit(params)
+        require 'json'
         # Handle analytics submission in the background to avoid blocking the
         # app or polluting the log with errors
         Concurrent::Future.execute(executor: @executor) do

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'logging'
 require 'uri'
 
@@ -43,6 +42,7 @@ module Bolt
       end
 
       def make_query(query, path = nil)
+        require 'json'
         body = JSON.generate(query: query)
         url = "#{uri}/pdb/query/v4"
         url += "/#{path}" if path

@@ -2,7 +2,6 @@
 
 require 'bolt/node/errors'
 require 'bolt/transport/base'
-require 'json'
 require 'shellwords'
 
 module Bolt
@@ -160,6 +159,7 @@ module Bolt
               remote_task_path = conn.write_remote_executable(task_dir, executable)
 
               if STDIN_METHODS.include?(input_method)
+                require 'json'
                 stdin = JSON.dump(arguments)
               end
 

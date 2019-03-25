@@ -5,7 +5,6 @@
 
 require 'uri'
 require 'benchmark'
-require 'json'
 require 'io/console'
 require 'logging'
 require 'optparse'

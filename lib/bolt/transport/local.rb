@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'fileutils'
 require 'tmpdir'
 require 'bolt/transport/base'
@@ -141,7 +140,11 @@ module Bolt
           logger.debug("Running '#{script}' with #{arguments}#{interpreter_debug}")
           unwrapped_arguments = unwrap_sensitive_args(arguments)
 
-          stdin = STDIN_METHODS.include?(input_method) ? JSON.dump(unwrapped_arguments) : nil
+          stdin = nil
+          if STDIN_METHODS.include?(input_method)
+            require 'json'
+            stdin = JSON.dump(unwrapped_arguments)
+          end
 
           if Bolt::Util.windows?
             # WINDOWS

@@ -5,7 +5,6 @@ require 'concurrent/delay'
 require 'concurrent/executor/thread_pool_executor'
 require 'concurrent/future'
 require 'find'
-require 'json'
 require 'logging'
 require 'open3'
 require 'bolt/error'
@@ -16,6 +15,9 @@ require 'bolt/util/puppet_log_level'
 module Bolt
   class Applicator
     def initialize(inventory, executor, modulepath, plugin_dirs, pdb_client, hiera_config, max_compiles)
+      # lazy-load expensive gem code
+      require 'json'
+
       @inventory = inventory
       @executor = executor
       @modulepath = modulepath

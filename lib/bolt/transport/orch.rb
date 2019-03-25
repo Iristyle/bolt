@@ -2,7 +2,6 @@
 
 require 'base64'
 require 'find'
-require 'json'
 require 'pathname'
 require 'bolt/transport/base'
 require 'bolt/transport/orch/connection'
@@ -38,6 +37,7 @@ module Bolt
       def initialize(*args)
         # lazy-load expensive gem code
         require 'orchestrator_client'
+        require 'json'
 
         @connections = {}
         super

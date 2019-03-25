@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'bolt/error'
 
 module Bolt
@@ -41,6 +40,8 @@ module Bolt
     end
 
     def self.for_task(target, stdout, stderr, exit_code)
+      require 'json'
+
       begin
         value = JSON.parse(stdout)
         unless value.is_a? Hash
@@ -74,6 +75,8 @@ module Bolt
     end
 
     def initialize(target, error: nil, message: nil, value: nil)
+      require 'json'
+
       @target = target
       @value = value || {}
       @value_set = !value.nil?

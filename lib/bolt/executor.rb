@@ -2,7 +2,6 @@
 
 # Used for $ERROR_INFO. This *must* be capitalized!
 require 'English'
-require 'json'
 require 'concurrent/configuration'
 require 'concurrent/delay'
 require 'concurrent/executor/thread_pool_executor'
@@ -203,6 +202,8 @@ module Bolt
     end
 
     def with_node_logging(description, batch)
+      require 'json'
+
       @logger.info("#{description} on #{batch.map(&:uri)}")
       result = yield
       @logger.info(result.to_json)
