@@ -204,6 +204,25 @@ PS
     end
   end
 
+  context "authenticating with Kerberos", kerberos: true do
+    before(:all) do
+      # disable all tests on Windows for now
+      skip('Windows Active Directory tickets are different') if Bolt::Util.windows?
+
+      @kerb_realm = ENV['KRB5_REALM'] || 'BOLT.TEST'
+      @smb_admin_pass = ENV['SMB_ADMIN_PASSWORD'] || 'B0ltrules!'
+
+      # TODO: check if klist has tickets already?
+      `echo #{@smb_admin_pass} | kinit Administrator@#{@kerb_realm}`
+    end
+
+    # verifies the local setup has already acquired the right Kerberos ticket/
+    it "has acquired a ticket granting ticket from the KDC" do
+      esc_realm = Regexp.escape(@kerb_realm)
+      expect(`klist`).to match(%r{krbtgt\/#{esc_realm}@#{esc_realm}})
+    end
+  end
+
   context "with an open connection" do
     it "can test whether the target is available", winrm: true do
       expect(winrm.connected?(target)).to eq(true)

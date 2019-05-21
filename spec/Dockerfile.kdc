@@ -1,0 +1,19 @@
+FROM alpine
+
+# enable Edge repositories to pick up newer Samba 4.9+ versions
+RUN apk add --no-cache supervisor tini gettext \
+    && apk add --no-cache samba-dc --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main
+
+ADD fixtures/kdc/docker-entrypoint.sh /
+ADD fixtures/kdc/samba-ad-config.sh /
+ADD fixtures/kdc/smb.conf.tmpl /
+ADD fixtures/kdc/kerberos-client-config.sh /
+ADD fixtures/kdc/krb5.conf.tmpl /
+ADD fixtures/kdc/supervisord.conf /etc/supervisord.conf
+
+VOLUME /var/lib/krb5kdc
+
+EXPOSE 749 464 88
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["/docker-entrypoint.sh"]
