@@ -33,3 +33,52 @@ PS="Invoke-Command -ComputerName omiserver $COMMAND $AUTH $SSL $CREDS"
 /usr/bin/pwsh -Command ''$PS'' | tee /tmp/psversion.txt
 
 cat /tmp/psversion.txt | grep ^OS.*Linux
+
+cat << EOF
+
+************************************************************
+Verifying HTTP SPNEGO auth bolt:${BOLT_PASSWORD} with omicli
+************************************************************
+
+EOF
+
+/opt/omi/bin/omicli --hostname omiserver -u bolt -p ${BOLT_PASSWORD} id --auth NegoWithCreds --encryption http
+
+cat << EOF
+
+************************************************************
+Verifying HTTP SPNEGO auth bolt:${BOLT_PASSWORD} with pwsh
+************************************************************
+
+EOF
+
+AUTH='-Authentication Negotiate'
+PS="Invoke-Command -ComputerName omiserver $COMMAND $AUTH $CREDS"
+/usr/bin/pwsh -Command ''$PS'' | tee /tmp/psversion.txt
+
+cat /tmp/psversion.txt | grep ^OS.*Linux
+
+
+cat << EOF
+
+************************************************************
+Verifying HTTPS SPNEGO auth bolt:${BOLT_PASSWORD} with omicli
+************************************************************
+
+EOF
+
+/opt/omi/bin/omicli --hostname omiserver -u bolt -p ${BOLT_PASSWORD} id --auth NegoWithCreds --encryption https
+
+cat << EOF
+
+************************************************************
+Verifying HTTPS SPNEGO auth bolt:${BOLT_PASSWORD} with pwsh
+************************************************************
+
+EOF
+
+AUTH='-Authentication Negotiate'
+PS="Invoke-Command -ComputerName omiserver $COMMAND $AUTH $SSL $CREDS"
+/usr/bin/pwsh -Command ''$PS'' | tee /tmp/psversion.txt
+
+cat /tmp/psversion.txt | grep ^OS.*Linux
