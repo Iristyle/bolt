@@ -105,6 +105,31 @@ services:
         aliases:
           - kdc.bolt.test
 
+  dev:
+    hostname: dev
+    domainname: bolt.test
+    # must use kdc for DNS
+    dns:
+      - 172.22.0.100
+      - 8.8.8.8
+    build:
+      context: .
+      dockerfile: Dockerfile.linuxdev
+      args:
+        BOLT_PASSWORD: bolt
+    ports:
+      - "422:22"
+    environment:
+      KRB5_REALM: ${KRB5_REALM:-BOLT.TEST}
+      KRB5_KDC: ${KRB5_KDC:-kdc.bolt.test}
+      SMB_DOMAIN: ${SMB_DOMAIN:-BOLT}
+      SMB_ADMIN: Administrator
+      SMB_ADMIN_PASSWORD: ${SMB_ADMIN_PASSWORD:-B0ltrules!}
+    depends_on:
+      - kdc
+    networks:
+      BOLT.TEST:
+
 networks:
   BOLT.TEST:
     driver: bridge
