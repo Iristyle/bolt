@@ -10,6 +10,7 @@ ADD fixtures/kdc/smb.conf.tmpl /
 ADD fixtures/kdc/kerberos-client-config.sh /
 ADD fixtures/kdc/krb5.conf.tmpl /
 ADD fixtures/kdc/supervisord.conf /etc/supervisord.conf
+ADD fixtures/kdc/add-spns.sh /
 
 VOLUME /var/lib/krb5kdc
 

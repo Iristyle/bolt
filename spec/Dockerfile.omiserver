@@ -41,6 +41,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     samba-common-bin \
     samba-libs \
     adcli \
+    # packagekit \
     omi \
     powershell \
  && wget https://github.com/PowerShell/psl-omi-provider/releases/download/v1.4.2-2/psrp-1.4.2-2.universal.x64.deb \
@@ -86,5 +87,7 @@ ADD fixtures/omiserver/domain-join.sh /
 ADD fixtures/omiserver/realmd.conf.tmpl /
 ADD fixtures/omiserver/smb.conf.tmpl /
 ADD fixtures/omiserver/user.map.tmpl /
+ADD fixtures/omiserver/sssd.conf.tmpl /
+ADD fixtures/omiserver/omi-enable-kerberos-auth.sh /
 ADD fixtures/omiserver/verify-omi-authentication.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]

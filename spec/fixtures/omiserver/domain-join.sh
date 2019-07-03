@@ -61,6 +61,16 @@ KRB5_TRACE=/dev/stdout klist
 cat << EOF
 
 ************************************************************
+GNU Name Sevice Switch Configuration
+************************************************************
+
+EOF
+# this should include `sss` for passwd, group, shadow, services, netgroup, sudoers
+cat /etc/nsswitch.conf
+
+cat << EOF
+
+************************************************************
 Creating realmd.conf
 ************************************************************
 
@@ -88,7 +98,6 @@ Creating /etc/samba/user.map
 EOF
 
 envsubst < user.map.tmpl | tee /etc/samba/user.map
-
 
 cat << EOF
 
@@ -141,6 +150,32 @@ EOF
 # DO NOT use `samba-tool domain join` per documentation
 net ads join -k -U ${SMB_ADMIN}%${SMB_ADMIN_PASSWORD}
 
+cat << EOF
+
+************************************************************
+Creating sssd.conf / setting permissions / ownership
+************************************************************
+
+EOF
+
+envsubst < sssd.conf.tmpl | tee /etc/sssd/sssd.conf
+
+# sssd service won't start without perms of 0600 and correct owner
+chmod 0600 /etc/sssd/sssd.conf
+chown root:root /etc/sssd/sssd.conf
+ls -rtaFl /etc/sssd/sssd.conf
+
+cat << EOF
+
+************************************************************
+Starting sssd service
+************************************************************
+
+EOF
+
+# TODO: does starting sssd mean samba must be restarted??
+service sssd start
+
 # emit information about domain join
 cat << EOF
 
@@ -161,3 +196,27 @@ net ads info
 EOF
 
 net ads info
+
+cat << EOF
+
+************************************************************
+Verifying sssd service
+************************************************************
+
+EOF
+
+service sssd status
+# dump all the sssd log files
+cat /var/log/sssd/*
+
+cat << EOF
+
+************************************************************
+Verifying ${SMB_ADMIN}@${KRB5_REALM} user can be looked up
+************************************************************
+
+EOF
+
+getent passwd ${SMB_ADMIN}@${KRB5_REALM}
+# should produce something like:
+# administrator:*:1219600500:1219600513:Administrator:/home/administrator@BOLT.TEST:

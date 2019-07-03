@@ -20,6 +20,7 @@ addons:
   # Ensure Travis resolves itself as the KDC hosted in Docker
   hosts:
     - kdc.bolt.test
+    - omiserver.bolt.test
 before_install:
 # Kerberos client for use with the Docker-based KDC
 - sudo apt-get install -yq krb5-user
@@ -71,6 +72,8 @@ script:
   elif ! git diff --exit-code; then
     false
   fi
+# HACK: SPNs have to be set after computers are domain joined
+- docker-compose -f spec/docker-compose.yml exec kdc /add-spns.sh
 - bundle exec rake puppetserver
 after_script:
 - docker-compose -f spec/docker-compose.yml logs

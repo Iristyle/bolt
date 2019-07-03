@@ -209,6 +209,7 @@ PS
       # disable all tests on Windows for now
       skip('Windows Active Directory tickets are different') if Bolt::Util.windows?
 
+      @kerb_user = 'Administrator'
       @kerb_realm = ENV['KRB5_REALM'] || 'BOLT.TEST'
       @smb_admin_pass = ENV['SMB_ADMIN_PASSWORD'] || 'B0ltrules!'
 
@@ -216,10 +217,25 @@ PS
       `echo #{@smb_admin_pass} | kinit Administrator@#{@kerb_realm}`
     end
 
+    let(:omi_target) do
+      # HTTPS
+      conf = mk_config(ssl: true, realm: @kerb_realm, 'ssl-verify': false)
+      t = make_target(host_: 'omiserver.bolt.test', port_: 45986, conf: conf)
+
+      # HTTP
+      # conf = mk_config(ssl: false, realm: @kerb_realm)
+      # make_target(host_: 'omiserver.bolt.test', port_: 45985, conf: conf)
+    end
+
+
     # verifies the local setup has already acquired the right Kerberos ticket/
     it "has acquired a ticket granting ticket from the KDC" do
       esc_realm = Regexp.escape(@kerb_realm)
       expect(`klist`).to match(%r{krbtgt\/#{esc_realm}@#{esc_realm}})
+    end
+
+    it "executes a command on a host" do
+      expect(winrm.run_command(omi_target, command)['stdout']).to eq("#{@kerb_user}\r\n")
     end
   end
 
