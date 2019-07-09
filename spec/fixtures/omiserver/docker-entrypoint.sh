@@ -30,4 +30,5 @@ Tailing OMI Server Logs
 
 EOF
 
+# TODO: can we tail multiple logs simultaneously when debug is on?
 tail -f /var/opt/omi/log/omiserver.log
