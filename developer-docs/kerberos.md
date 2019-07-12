@@ -66,15 +66,8 @@ Important client tools include:
 
 Manual verification of Bolt can be performed from a Linux node that is domain joined to Active Directory using the following steps:
 
-- Set the default winrm authentication to specify the domain in `~/puppetlabs/bolt/bolt.yaml` like:
-
-```yaml
-winrm:
-  realm: DOMAIN.COM
-```
-
 - `kinit -C Administrator@domain.com` to acquire a TGT (ticket granting ticket)
-- `bolt command run 'whoami' --targets winrm://dc.domain.com` to connect over HTTPS (`--no-ssl-verify` may be required if the target uses a self-signed certificate)
-- `bolt command run 'whoami' --targets winrm://dc.domain.com --no-ssl` to connect over HTTP
+- `bolt command run 'whoami' --targets winrm://dc.domain.com --realm DOMAIN.COM` to connect over HTTPS (`--no-ssl-verify` may be required if the target uses a self-signed certificate)
+- `bolt command run 'whoami' --targets winrm://dc.domain.com --realm DOMAIN.COM --no-ssl` to connect over HTTP
 
 In the future, this testing will be automated.

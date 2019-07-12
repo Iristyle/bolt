@@ -50,6 +50,7 @@ Options are optional unless marked as required. 
 |------|-----------|
 |`--user`, `-u`|User to authenticate as.|
 |`--password`, `-p`|Password to authenticate with. Pass this flag without any value to securely prompt for the password.|
+| `--realm` | Kerberos realm to authenticate against|
 | `--private-key` |Private ssh key to authenticate with|
 | `--host-key-check, --no-host-key-check` | Do not require verification of new hosts in the `known_hosts` file.
 
